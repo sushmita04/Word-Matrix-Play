@@ -1,55 +1,39 @@
-#include <iostream>
-#include <stdlib.h>
-#include <string.h>
-const int T_S = 256;                                  //hash table size
+#include <bits/stdc++.h>
 using namespace std;
 
-struct Node {
-    int key;
-    Node *next;
-};
-
-struct Node *ht[T_S];
-void InitializeHT() {                                   //initialization of hash table
-    for(int i = 0; i < T_S; i++)
-        ht[i] = NULL;
-}
-
-int HashFunc(int key) {                                 //hash function
-    return key % T_S;
-}
-
-void InsertInHashTable(struct Node** head, int new_data)
-{
-    struct Node* new_node = (struct Node*) malloc(sizeof(struct Node));
-    struct Node *temp = *head;                          //temp is to traverse
-    new_node->key  = new_data;
-    new_node->next = NULL;
-
-    if(*head == NULL) {
-       *head = new_node;
-       return;
-    }
-    while(temp->next != NULL)
-        temp = temp->next;
-    temp->next = new_node;
-    return;
-}
 
 int main() {
-   int index, i=0;
-   string str;
-   cout<<"Enter the word ";
-   cin>>str;
-   InitializeHT();
-   while(str[i]!='\0') {
-        index=HashFunc(str[i]);
-        struct Node *a = ht[index];
-        struct Node **b = &a;
-        InsertInHashTable(b, i);          //check the error
-   }
-   return 0;
+
+    int k, m, n;
+    bool flag;
+    string S,R="";
+    cin>>S;
+
+    unordered_set<char>H;
+
+    for(auto ch:S){
+        if(H.find(ch)==H.end()){
+            R+=ch;
+            H.insert(ch);
+        }
+    }
+
+    for(int i=0;i<R.length();i++){
+        for(int j=i+1;j<R.length();j++){
+    	    k=0; m=0; n=1; flag=1;
+	        while(S[k]!='\0') {            
+	            if(S[k]==R[i] && n==1)
+	            {   m=1; n=0;       }
+	            else if(S[k]==R[j] && m==1)
+	            {   n=1; m=0;       }
+	            else if(S[k]==R[i] || S[k]==R[j])
+	            {   flag=0; break;  }
+	            
+	            ++k;
+            }
+	        if(flag==1)
+	            cout<<R[i]<<"--"<<R[j]<<endl;
+        }
+    }
+    return 0;
 }
-
-
-
