@@ -51,6 +51,7 @@ int main() {
 	//finds all the (2^edges) digraph configurations/ adjacency matrices 
 	for(i=0; i<pow(2,edges); ++i) {
 		bin(i, edges);				//gets the orientation
+		diag[n][n]={0};				//initialise the digraph to 0 before marking the directed edges
 		for(j=0; j<str.size(); ++j) {		//edges=str.size()
 			if(str[j]=='0')
 				diag[vect[j].first][vect[j].second]=1;
