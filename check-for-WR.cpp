@@ -1,17 +1,21 @@
+/*
+finalllll
+WORKING FOR WHEEL GRAPH, BUT NOT FOR PETERSEN GRAPH
+*/
+
 #include <bits/stdc++.h>
 using namespace std;
 
 string str;			//configuration
-int n, i, j, k, adj[7][7]={0}, diag[7][7]={0};
+int n, i, j, k, adj[10][10]={0}, diag[10][10]={0}, tran[10][10];
 vector <pair <int, int> > vect;
-void make_matrix_zero(int diag[][7], int n) {
+void make_matrix_to(int diag[][10], int n, int value) {
     for(int m=0; m<n; ++m)
         for(int l=0; l<n; ++l)
-            diag[m][l]=0;
-
+            diag[m][l]=value;
 }
 
-int find_edges(int adj[][7], int n) {						//*********
+int find_edges(int adj[][10], int n) {
     int edges=0;
 	for(i=0; i<n; ++i) {
 		for(j=i+1; j<n; ++j) {
@@ -21,7 +25,6 @@ int find_edges(int adj[][7], int n) {						//*********
 			}
 		}
 	}
-	cout<<edges<<endl;
 	return edges;
 }
 void reverse(char temp[], int length)
@@ -63,8 +66,7 @@ char* itoa_(int num, char* temp, int base)
 
 void binary_orientation(unsigned n, int edges) {
 	char temp[edges+1]={};
-			//finds the unique binary configuration
-	str=itoa_(n, temp, 2);
+	str=itoa_(n, temp, 2);			        //finds the unique binary configuration
 	if(str.size()!=edges) {
 		int a=str.size();
 		for(int i=0; i<edges; ++i) {
@@ -75,35 +77,82 @@ void binary_orientation(unsigned n, int edges) {
 		}
 		str=temp;
 	}
-	cout<<str<<endl;
 }
 
-void find_all_digraph(int n, int edges, int diag[][7]) {					//**********
+bool transitivity_check(int diag[][10], int n) {
+    int ordering[n][n]={0};
+    make_matrix_to(tran, n, 0);
+    for(int i=0; i<n; ++i) {
+        for(int j=0; j<n; ++j) {
+            if(diag[i][j]==1)
+                tran[i][j]=1;
+        }
+    }
+    for(int i=0; i<n; ++i) {
+        for(int j=0; j<n; ++j) {
+            for(int k=0; k<n; ++k) {
+                if(tran[i][j]==1 && tran[j][k]==1)
+                    tran[i][k]=1;
+            }
+        }
+    }
+    
+    bool flag=0;
+    int count1=0;
+    
+    //for semi-transitivity
+    for(int i=0; i<n; ++i) {
+        for(int k=0; k<n; ++k) {
+            if(tran[i][k]==1 && adj[i][k]==1) {
+                for(int j=0; j<n; ++j) {
+                    if(tran[i][j]==1 && tran[j][k]==1) {
+                        count1++;
+                        if(diag[i][j]==1 && diag[j][k]==1 && diag[i][k]==1) {
+                            return 0;
+                        }
+                    	else {
+                        	flag=1;
+                    	}
+                    }
+                    if(count1==0)
+                        flag=1;
+                }
+            }
+        }
+    }
+    return flag;
+}
+
+bool find_all_digraph(int n, int edges, int diag[][10]) {
 	//finds all the (2^edges) digraph configurations/ adjacency matrices
 	int x=pow(2,edges);
 	for(i=0; i<x; ++i) {
 		binary_orientation(i, edges);			//gets the orientation
-		make_matrix_zero(diag, n);				//initialise the digraph to 0 before marking the directed edges
+        //cout<<"\ndiag"<<i<<endl;
+		make_matrix_to(diag, n, 0);				//initialise the digraph to 0 before marking the directed edges
 		for(j=0; j<str.size(); ++j) {		//edges=str.size()
 			if(str[j]=='0')
 				diag[vect[j].first][vect[j].second]=1;
 			else if(str[j]=='1')
 				diag[vect[j].second][vect[j].first]=1;
 		}
-		for(j=0;j<n;j++)
-        {
-            for(k=0;k<n;k++)
-                cout<<diag[j][k]<<" ";
-            cout<<"\n";
-        }
         cout<<endl;
+        if(transitivity_check(diag, n)) {
+            cout<<"\n1Word-representable";
+            return 1;
+        }
+        else 
+            continue;
 	}
-
+    return 0;
 }
 
 int main() {
+	int t;
+	cin>>t;
 	cin>> n;				//order of the matrix; number of vertices
 
+    while(t--) {
 	//input of adjacency matrix
 	for(i=0; i<n; ++i) {
 		for(j=0; j<n; ++j) {
@@ -111,7 +160,15 @@ int main() {
 		}
 	}
 	//if edges==((n*(n-1))/2) then WR  i.e. k-complete graph
-    int EDGES=find_edges(adj, n);
-    find_all_digraph(n, EDGES, diag);
-
+    	int EDGES=find_edges(adj, n);
+    	if(EDGES!=(n*(n-1))/2) { 
+        	bool ANS=find_all_digraph(n, EDGES, diag);
+        	if(ANS==0)
+            		cout<<"\n2Non-word representable";
+    	}
+    	else {
+        	cout<<"\n3Word-representable";
+    	}
+    }
+    return 0;
 }
