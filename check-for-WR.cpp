@@ -1,6 +1,5 @@
 /*
-finalllll
-WORKING FOR WHEEL GRAPH, BUT NOT FOR PETERSEN GRAPH
+Code to checkif a given graph is word representable or not
 */
 
 #include <bits/stdc++.h>
@@ -128,7 +127,6 @@ bool find_all_digraph(int n, int edges, int diag[][10]) {
 	int x=pow(2,edges);
 	for(i=0; i<x; ++i) {
 		binary_orientation(i, edges);			//gets the orientation
-        //cout<<"\ndiag"<<i<<endl;
 		make_matrix_to(diag, n, 0);				//initialise the digraph to 0 before marking the directed edges
 		for(j=0; j<str.size(); ++j) {		//edges=str.size()
 			if(str[j]=='0')
@@ -138,7 +136,7 @@ bool find_all_digraph(int n, int edges, int diag[][10]) {
 		}
         cout<<endl;
         if(transitivity_check(diag, n)) {
-            cout<<"\n1Word-representable";
+            cout<<"\nWord-representable";
             return 1;
         }
         else 
@@ -164,10 +162,10 @@ int main() {
     	if(EDGES!=(n*(n-1))/2) { 
         	bool ANS=find_all_digraph(n, EDGES, diag);
         	if(ANS==0)
-            		cout<<"\n2Non-word representable";
+            		cout<<"\nNon-word representable";
     	}
     	else {
-        	cout<<"\n3Word-representable";
+        	cout<<"\nWord-representable";
     	}
     }
     return 0;
