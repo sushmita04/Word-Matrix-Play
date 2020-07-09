@@ -9,37 +9,35 @@ string str;			//configuration
 int n, i, j, k, adj[10][10]={0}, diag[10][10]={0}, tran[10][10];
 vector <pair <int, int> > vect;
 void make_matrix_to(int diag[][10], int n, int value) {
-    for(int m=0; m<n; ++m)
-        for(int l=0; l<n; ++l)
-            diag[m][l]=value;
+	for(int m=0; m<n; ++m)
+        	for(int l=0; l<n; ++l)
+            		diag[m][l]=value;
 }
 
 int find_edges(int adj[][10], int n) {
-    int edges=0;
-	for(i=0; i<n; ++i) {
-		for(j=i+1; j<n; ++j) {
-			if(adj[i][j]==1) {
-				vect.push_back(make_pair (i, j));
-				++edges;
+    	int edges=0;
+		for(i=0; i<n; ++i) {
+			for(j=i+1; j<n; ++j) {
+				if(adj[i][j]==1) {
+					vect.push_back(make_pair (i, j));
+					++edges;
+				}
 			}
 		}
-	}
 	return edges;
 }
-void reverse(char temp[], int length)
-{
+
+void reverse(char temp[], int length) {
 	int start = 0;
 	int end = length -1;
-	while (start < end)
-	{
+	while (start < end) {
 		swap(*(temp+start), *(temp+end));
 		start++;
 		end--;
 	}
 }
 
-char* itoa_(int num, char* temp, int base)
-{
+char* itoa_(int num, char* temp, int base) {
 	int i = 0;
 	bool isNegative = false;
 	if (num == 0) {
@@ -79,47 +77,47 @@ void binary_orientation(unsigned n, int edges) {
 }
 
 bool transitivity_check(int diag[][10], int n) {
-    int ordering[n][n]={0};
-    make_matrix_to(tran, n, 0);
-    for(int i=0; i<n; ++i) {
-        for(int j=0; j<n; ++j) {
-            if(diag[i][j]==1)
-                tran[i][j]=1;
-        }
-    }
-    for(int i=0; i<n; ++i) {
-        for(int j=0; j<n; ++j) {
-            for(int k=0; k<n; ++k) {
-                if(tran[i][j]==1 && tran[j][k]==1)
-                    tran[i][k]=1;
-            }
-        }
-    }
+	int ordering[n][n]={0};
+    	make_matrix_to(tran, n, 0);
+    	for(int i=0; i<n; ++i) {
+        	for(int j=0; j<n; ++j) {
+            	if(diag[i][j]==1)
+                	tran[i][j]=1;
+        	}
+    	}
+    	for(int i=0; i<n; ++i) {
+        	for(int j=0; j<n; ++j) {
+            		for(int k=0; k<n; ++k) {
+                		if(tran[i][j]==1 && tran[j][k]==1)
+                    			tran[i][k]=1;
+            		}
+        	}
+    	}
     
-    bool flag=0;
-    int count1=0;
+    	bool flag=0;
+    	int count1=0;
     
-    //for semi-transitivity
-    for(int i=0; i<n; ++i) {
-        for(int k=0; k<n; ++k) {
-            if(tran[i][k]==1 && adj[i][k]==1) {
-                for(int j=0; j<n; ++j) {
-                    if(tran[i][j]==1 && tran[j][k]==1) {
-                        count1++;
-                        if(diag[i][j]==1 && diag[j][k]==1 && diag[i][k]==1) {
-                            return 0;
-                        }
-                    	else {
-                        	flag=1;
-                    	}
-                    }
-                    if(count1==0)
-                        flag=1;
-                }
-            }
-        }
-    }
-    return flag;
+    	//for semi-transitivity
+    	for(int i=0; i<n; ++i) {
+        	for(int k=0; k<n; ++k) {
+            		if(tran[i][k]==1 && adj[i][k]==1) {
+                		for(int j=0; j<n; ++j) {
+                    			if(tran[i][j]==1 && tran[j][k]==1) {
+                        			count1++;
+                        			if(diag[i][j]==1 && diag[j][k]==1 && diag[i][k]==1) {
+                            				return 0;
+                        			}
+                    				else {
+                        				flag=1;
+                    				}
+                    			}
+                    			if(count1==0)
+                        			flag=1;
+                		}
+            		}
+        	}
+    	}
+    	return flag;
 }
 
 bool find_all_digraph(int n, int edges, int diag[][10]) {
@@ -134,39 +132,39 @@ bool find_all_digraph(int n, int edges, int diag[][10]) {
 			else if(str[j]=='1')
 				diag[vect[j].second][vect[j].first]=1;
 		}
-        cout<<endl;
-        if(transitivity_check(diag, n)) {
-            cout<<"\nWord-representable";
-            return 1;
-        }
-        else 
-            continue;
+        	if(transitivity_check(diag, n)) {
+            		return 1;
+        	}
+        	else 
+            		continue;
 	}
-    return 0;
+    	return 0;
 }
 
 int main() {
 	int t;
-	cin>>t;
+	cin>>t;					//number of test cases
 	cin>> n;				//order of the matrix; number of vertices
 
-    while(t--) {
-	//input of adjacency matrix
-	for(i=0; i<n; ++i) {
-		for(j=0; j<n; ++j) {
-			cin>>adj[i][j];
+    	while(t--) {
+		//input of adjacency matrix
+		for(i=0; i<n; ++i) {
+			for(j=0; j<n; ++j) {
+				cin>>adj[i][j];
+			}
 		}
-	}
-	//if edges==((n*(n-1))/2) then WR  i.e. k-complete graph
-    	int EDGES=find_edges(adj, n);
-    	if(EDGES!=(n*(n-1))/2) { 
-        	bool ANS=find_all_digraph(n, EDGES, diag);
-        	if(ANS==0)
-            		cout<<"\nNon-word representable";
+		//if edges==((n*(n-1))/2) then WR  i.e. k-complete graph
+    		int EDGES=find_edges(adj, n);
+    		if(EDGES!=(n*(n-1))/2) { 
+        		bool ANS=find_all_digraph(n, EDGES, diag);
+        		if(ANS==0)
+            			cout<<"NO\n";
+			else
+				cout<<"YES\n";
+    		}
+    		else {
+        		cout<<"YES\n";
+    		}
     	}
-    	else {
-        	cout<<"\nWord-representable";
-    	}
-    }
-    return 0;
+    	return 0;
 }
