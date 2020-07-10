@@ -1,5 +1,5 @@
 /*
-Code to checkif a given graph is word representable or not
+Code to check if a given graph is word representable or not
 */
 
 #include <bits/stdc++.h>
@@ -142,29 +142,53 @@ bool find_all_digraph(int n, int edges, int diag[][10]) {
 }
 
 int main() {
-	int t;
-	cin>>t;					//number of test cases
-	cin>> n;				//order of the matrix; number of vertices
+	n=5;
+	fstream file;
+	ofstream fout;
+	string word, filename="final_nauty.txt", checkword="5.", nextword="6.";
+	file.open(filename.c_str());
+	fout.open("OUTPUT.txt");
+	if(file.is_open() && fout.is_open()) {
+		while(file>>word)
+		{
+			if(word==checkword)
+			{
+	    			file>>word;
+				for(i=0; i<n; ++i)
+				{
+					for(j=0; j<n; ++j)
+					{
+                				int tempo;
+				    		stringstream test_word(word);
+			    			test_word>>tempo;
+			    			adj[i][j]=tempo;
+				    		//fout<<adj[i][j];
+				    		//file>>word;
+					}
+					//fout<<endl;
+				}
+				int EDGES=find_edges(adj, n);
 
-    	while(t--) {
-		//input of adjacency matrix
-		for(i=0; i<n; ++i) {
-			for(j=0; j<n; ++j) {
-				cin>>adj[i][j];
+    				if(EDGES!=(n*(n-1))/2) {
+       					bool ANS=find_all_digraph(n, EDGES, diag);
+        				if(ANS==0)
+            					fout<<"NO\n";
+            		            	else
+                	                	fout<<"YES\n";
+    				}
+    				else {
+        				fout<<"YES\n";
+    				}
+
 			}
+			if(word==nextword)
+        			break;
 		}
-		//if edges==((n*(n-1))/2) then WR  i.e. k-complete graph
-    		int EDGES=find_edges(adj, n);
-    		if(EDGES!=(n*(n-1))/2) { 
-        		bool ANS=find_all_digraph(n, EDGES, diag);
-        		if(ANS==0)
-            			cout<<"NO\n";
-			else
-				cout<<"YES\n";
-    		}
-    		else {
-        		cout<<"YES\n";
-    		}
-    	}
-    	return 0;
+	}
+	else
+    		cout<<"error in file opening.";
+	file.close();
+	fout.close();
+	cout<<"\nDone\n";
+	return 0;
 }
