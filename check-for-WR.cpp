@@ -163,10 +163,11 @@ int main() {
 			    			test_word>>tempo;
 			    			adj[i][j]=tempo;
 				    		//fout<<adj[i][j];
-				    		//file>>word;
+				    		file>>word;
 					}
 					//fout<<endl;
 				}
+				//fout<<endl;
 				int EDGES=find_edges(adj, n);
 
     				if(EDGES!=(n*(n-1))/2) {
@@ -186,7 +187,7 @@ int main() {
 		}
 	}
 	else
-    		cout<<"error in file opening.";
+    		cout<<"Error in file opening.";
 	file.close();
 	fout.close();
 	cout<<"\nDone\n";
