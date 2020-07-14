@@ -14,19 +14,6 @@ void make_matrix_to(int diag[][10], int n, int value) {
             		diag[m][l]=value;
 }
 
-int find_edges(int adj[][10], int n) {
-    	int edges=0;
-		for(i=0; i<n; ++i) {
-			for(j=i+1; j<n; ++j) {
-				if(adj[i][j]==1) {
-					vect.push_back(make_pair (i, j));
-					++edges;
-				}
-			}
-		}
-	return edges;
-}
-
 void reverse(char temp[], int length) {
 	int start = 0;
 	int end = length -1;
@@ -143,6 +130,7 @@ bool find_all_digraph(int n, int edges, int diag[][10]) {
 
 int main() {
 	string word, filename, opfile, checkword="Graph";
+	int EDGES;
     	cout<<"Enter the order of matrix: ";
     	cin>>n;
 
@@ -162,6 +150,7 @@ int main() {
 		{
 			if(word==checkword)
 			{
+				EDGES=0;
                 		file>>word;
                 		file>>word;
                 		file>>word;
@@ -175,6 +164,10 @@ int main() {
 			    			test_word>>tempo;
 			    			adj[i][j]=tempo;
 				    		//fout<<adj[i][j]<<" ";
+						if(j>i && adj[i][j]==1) {
+							vect.push_back(make_pair (i, j));
+							++EDGES;
+						}
 				    		if(!(i==n-1 && j==n-1))
                                 			file>>word;
 
@@ -183,7 +176,6 @@ int main() {
 				}
 				//fout<<endl;
 
-				int EDGES=find_edges(adj, n);
                 		if(EDGES!=(n*(n-1))/2) {
                     			bool ANS=find_all_digraph(n, EDGES, diag);
                     			if(ANS==0)
