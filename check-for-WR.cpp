@@ -142,48 +142,60 @@ bool find_all_digraph(int n, int edges, int diag[][10]) {
 }
 
 int main() {
-	n=5;
+	string word, filename, opfile, checkword="Graph";
+    	cout<<"Enter the order of matrix: ";
+    	cin>>n;
+
+	ostringstream str1;
+	str1 << n;
+	opfile="Output_"+ str1.str() + ".txt";
+	cout<<"Enter the filename (with \".txt\" extension) to read from: ";
+	cin>>filename;
+
 	fstream file;
 	ofstream fout;
-	string word, filename="final_nauty.txt", checkword="5.", nextword="6.";
+
 	file.open(filename.c_str());
-	fout.open("OUTPUT.txt");
+	fout.open(opfile.c_str());
 	if(file.is_open() && fout.is_open()) {
 		while(file>>word)
 		{
 			if(word==checkword)
 			{
-	    			file>>word;
+                		file>>word;
+                		file>>word;
+                		file>>word;
+                		file>>word;
 				for(i=0; i<n; ++i)
 				{
 					for(j=0; j<n; ++j)
 					{
-                				int tempo;
+                            			int tempo;
 				    		stringstream test_word(word);
 			    			test_word>>tempo;
 			    			adj[i][j]=tempo;
-				    		//fout<<adj[i][j];
-				    		file>>word;
+				    		//fout<<adj[i][j]<<" ";
+				    		if(!(i==n-1 && j==n-1))
+                                			file>>word;
+
 					}
 					//fout<<endl;
 				}
 				//fout<<endl;
-				int EDGES=find_edges(adj, n);
 
-    				if(EDGES!=(n*(n-1))/2) {
-       					bool ANS=find_all_digraph(n, EDGES, diag);
-        				if(ANS==0)
-            					fout<<"NO\n";
-            		            	else
-                	                	fout<<"YES\n";
-    				}
-    				else {
+				int EDGES=find_edges(adj, n);
+                		if(EDGES!=(n*(n-1))/2) {
+                    			bool ANS=find_all_digraph(n, EDGES, diag);
+                    			if(ANS==0)
+                        			fout<<"NO\n";
+                    			else
+                        			fout<<"YES\n";
+                		}
+                		else {
         				fout<<"YES\n";
-    				}
+                		}
 
 			}
-			if(word==nextword)
-        			break;
 		}
 	}
 	else
