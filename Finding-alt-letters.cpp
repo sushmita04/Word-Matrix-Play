@@ -7,45 +7,45 @@ int main() {
 
 	int k, m, n;
 	bool flag;
-	string S, Word = "";
-	cin>>S;
+	string Word, UniqueW = "";
+	cin>>Word;
 
 	unordered_set<char>H;
 
 	cout << "\nEnter the word: ";
-	for(auto ch:S)
+	for(auto ch:Word)
 	{
         	if(H.find(ch)==H.end())
 		{
-        		Word += ch;
+        		UniqueW += ch;
         		H.insert(ch);
 		}
 	}
 
-	int size = Word.length();
+	int size = UniqueW.length();
 	vector<vector<int> > vec(size, vector<int> (size, 0));		//adjacency matrix
 
 	cout << "\nThe alternating letters are:\n";
-	for(int i=0; i<Word.length(); i++)
+	for(int i=0; i<size; i++)
 	{
-        	for(int j=i+1; j<Word.length(); j++)
+        	for(int j=i+1; j<size; j++)
 		{
     			k = 0;
 			m = 0;
 			n = 1;
 			flag = 1;
-			while(S[k]!='\0') {
-	    			if(S[k]==Word[i] && n==1)
+			while(Word[k]!='\0') {
+	    			if(Word[k]==UniqueW[i] && n==1)
 	        		{
 					m = 1;
 				 	n = 0;
 				}
-	        		else if(S[k]==Word[j] && m==1)
+	        		else if(Word[k]==UniqueW[j] && m==1)
 	        		{
 					n = 1;
 					m = 0;
 				}
-	        		else if(S[k]==Word[i] || S[k]==Word[j])
+	        		else if(Word[k]==UniqueW[i] || Word[k]==UniqueW[j])
 	        		{
 					flag = 0;
 					break;
@@ -54,7 +54,7 @@ int main() {
             		}
 	    		if(flag==1)
 			{
-	    			cout << Word[i] << "--" << Word[j] << endl;
+	    			cout << UniqueW[i] << "--" << UniqueW[j] << endl;
 	        		vec[i][j] = 1;
 	        		vec[j][i] = 1;
 	    		}
@@ -67,7 +67,7 @@ int main() {
 		if(i==-1)
 		{
 			cout<<"  ";
-			for(char c:Word)
+			for(char c:UniqueW)
 			{
 				cout << c << " ";
 			}
@@ -75,7 +75,7 @@ int main() {
 		}
 		else
 		{
-			cout << Word[i] << " ";
+			cout << UniqueW[i] << " ";
 			for(int j = 0; j < size; j++)
 			{
 				cout << vec[i][j] << " ";
