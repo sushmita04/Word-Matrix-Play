@@ -6,7 +6,7 @@ Code to check if a given graph is word representable or not
 using namespace std;
 
 string str;			//configuration
-int n, i, j, k, adj[10][10]={0}, diag[10][10]={0}, tran[10][10];
+int n, i, j, k, adj[10][10]={0}, diag[10][10]={0}, tempCheckTransitiveDiag[10][10];
 vector <pair <int, int> > vect;
 void make_matrix_to(int diag[][10], int n, int value) {
 	for(int m=0; m<n; ++m)
@@ -65,18 +65,18 @@ void binary_orientation(unsigned n, int edges) {
 
 bool transitivity_check(int diag[][10], int n) {
 	int ordering[n][n]={0};
-    	make_matrix_to(tran, n, 0);
+    	make_matrix_to(tempCheckTransitiveDiag, n, 0);
     	for(int i=0; i<n; ++i) {
         	for(int j=0; j<n; ++j) {
             	if(diag[i][j]==1)
-                	tran[i][j]=1;
+                	tempCheckTransitiveDiag[i][j]=1;
         	}
     	}
     	for(int i=0; i<n; ++i) {
         	for(int j=0; j<n; ++j) {
             		for(int k=0; k<n; ++k) {
-                		if(tran[i][j]==1 && tran[j][k]==1)
-                    			tran[i][k]=1;
+                		if(tempCheckTransitiveDiag[i][j]==1 && tempCheckTransitiveDiag[j][k]==1)
+                    			tempCheckTransitiveDiag[i][k]=1;
             		}
         	}
     	}
@@ -87,9 +87,9 @@ bool transitivity_check(int diag[][10], int n) {
     	//for semi-transitivity
     	for(int i=0; i<n; ++i) {
         	for(int k=0; k<n; ++k) {
-            		if(tran[i][k]==1 && adj[i][k]==1) {
+            		if(tempCheckTransitiveDiag[i][k]==1 && adj[i][k]==1) {
                 		for(int j=0; j<n; ++j) {
-                    			if(tran[i][j]==1 && tran[j][k]==1) {
+                    			if(tempCheckTransitiveDiag[i][j]==1 && tempCheckTransitiveDiag[j][k]==1) {
                         			count1++;
                         			if(diag[i][j]==1 && diag[j][k]==1 && diag[i][k]==1) {
                             				return 0;
